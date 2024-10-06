@@ -183,6 +183,23 @@ app.put('/shirts/:id', (request, response, next) => {
   }
 });
 
+// Route to delete shirt
+app.delete('/shirts/:id', (request, response, next) => {
+  try {
+    const shirtId = parseInt(request.params.id);
+    const shirtIndex = SHIRTS.findIndex((shirt) => shirt.id === shirtId);
+
+    if (shirtIndex === -1) {
+      return response.status(404).json({ message: 'Shirt is not found!' });
+    }
+
+    SHIRTS.splice(shirtIndex, 1);
+    response.status(200).json({ message: 'Shirt was deleted!' });
+  } catch (error) {
+    next(error);
+  }
+});
+
 // Error Handling
 // Generic Error Handling
 app.use((error, request, response, next) => {
