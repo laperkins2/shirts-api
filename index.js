@@ -131,6 +131,30 @@ app.get('/shirts/:id', (request, response, next) => {
   }
 });
 
+// Route to add shirts
+app.post('/shirts', (request, response, next) => {
+  try {
+    const { name, description, price, category, inStock } = request.body;
+    if (!name || !description || !price || !category || !inStock) {
+      return request
+        .status(400)
+        .json({ message: 'Please provide all required fields' });
+    }
+    const newShirt = {
+      id: SHIRTS.length + 1,
+      name,
+      description,
+      price,
+      category,
+      inStock,
+    };
+    SHIRTS.push(newShirt);
+    response.status(201).json(newShirt);
+  } catch (error) {
+    next(error);
+  }
+});
+
 // Error Handling
 // Generic Error Handling
 app.use((error, request, response, next) => {
