@@ -136,7 +136,7 @@ app.post('/shirts', (request, response, next) => {
   try {
     const { name, description, price, category, inStock } = request.body;
     if (!name || !description || !price || !category || !inStock) {
-      return request
+      return response
         .status(400)
         .json({ message: 'Please provide all required fields' });
     }
@@ -150,6 +150,34 @@ app.post('/shirts', (request, response, next) => {
     };
     SHIRTS.push(newShirt);
     response.status(201).json(newShirt);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Route to update shirt
+app.put('/shirts/:id', (request, response, next) => {
+  try {
+    const findShirt = SHIRTS.find((value) => {
+      return value.id === parseInt(request.params.id);
+    });
+
+    const { name, description, price, category, inStock } = request.body;
+    if (!name || !description || !price || !category || !inStock) {
+      return response
+        .status(400)
+        .json({ message: 'Please provide all required fields' });
+    }
+
+    // set object values sent to request body
+    findShirt.name = name;
+    findShirt.description = description;
+    findShirt.price = price;
+    findShirt.category = category;
+    findShirt.inStock = inStock;
+
+    //send update back in response
+    response.json(findShirt);
   } catch (error) {
     next(error);
   }
