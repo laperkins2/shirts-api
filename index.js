@@ -17,6 +17,89 @@ app.use(cors());
 // Use JSON middleware to parse request bodies
 app.use(express.json());
 
+const SHIRTS = [
+  {
+    id: 1,
+    name: 'Spider Man',
+    description: 'A web shooting man in a spandex suit!',
+    price: 15.99,
+    category: 'Super Hero',
+    inStock: true,
+  },
+  {
+    id: 2,
+    name: 'Basketball Ballers',
+    description: 'A shirt with basketball greats.',
+    price: 21.99,
+    category: 'Sports',
+    inStock: true,
+  },
+  {
+    id: 3,
+    name: 'Football Life',
+    description: 'A Receiver making a catch.',
+    price: 21.99,
+    category: 'Sports',
+    inStock: true,
+  },
+  {
+    id: 4,
+    name: 'Batwoman',
+    description: 'Colorful and cheery woman in a bat suit.',
+    price: 2.19,
+    category: 'Super Hero',
+    inStock: true,
+  },
+  {
+    id: 5,
+    name: "It's, it's, it's GONE!",
+    description: 'A homerun leaving the ballpark.',
+    price: 17.99,
+    category: 'Sports',
+    inStock: true,
+  },
+  {
+    id: 6,
+    name: 'GOOOOOAAALLL',
+    description: 'A soccer player scoring a goal.',
+    price: 18.99,
+    category: 'Sports',
+    inStock: true,
+  },
+  {
+    id: 7,
+    name: 'Might Dogs',
+    description: 'A group of dogs fighting crime.',
+    price: 22.99,
+    category: 'Super Hero',
+    inStock: true,
+  },
+  {
+    id: 8,
+    name: 'Night Owl',
+    description: 'A Owl fighting crime during the night.',
+    price: 16.99,
+    category: 'Super Hero',
+    inStock: true,
+  },
+  {
+    id: 9,
+    name: 'Energy Blaster',
+    description: 'High-octane energy blaster used by Electro man.',
+    price: 14.99,
+    category: 'Super Hero',
+    inStock: true,
+  },
+  {
+    id: 10,
+    name: 'Dive and dig',
+    description: 'A great defensive move by a volleyball player.',
+    price: 19.99,
+    category: 'Sports',
+    inStock: true,
+  },
+];
+
 // Define our Routes
 app.get('/', (request, response, next) => {
   response.json({ hello: 'World' });
