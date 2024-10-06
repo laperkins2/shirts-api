@@ -101,8 +101,34 @@ const SHIRTS = [
 ];
 
 // Define our Routes
+// Home route
 app.get('/', (request, response, next) => {
   response.json({ hello: 'World' });
+});
+
+// Route to get all shirts
+app.get('/shirts', (request, response, next) => {
+  try {
+    response.json(SHIRTS);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Route to get single shirt
+app.get('/shirts/:id', (request, response, next) => {
+  try {
+    const findShirt = SHIRTS.find((value) => {
+      return value.id === parseInt(request.params.id);
+    });
+
+    if (!findShirt) {
+      return response.status(404).json({ message: "Shirts does't exist!" });
+    }
+    response.json(findShirt);
+  } catch (error) {
+    next(error);
+  }
 });
 
 // Error Handling
