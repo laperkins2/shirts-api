@@ -46,7 +46,7 @@ const SHIRTS = [
     id: 4,
     name: 'Batwoman',
     description: 'Colorful and cheery woman in a bat suit.',
-    price: 2.19,
+    price: 21.99,
     category: 'Super Hero',
     inStock: true,
   },
