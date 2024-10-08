@@ -1,8 +1,17 @@
+//Import dotenv
+require('dotenv').config();
+
 // Import Express
 const express = require('express');
 
 // Import CORS
 const cors = require('cors');
+
+// Import axios
+const axios = require('axios');
+
+// Import supabase Instance
+const supabase = require('./supabaseInstance');
 
 // create an express application
 const app = express();
@@ -107,9 +116,11 @@ app.get('/', (request, response, next) => {
 });
 
 // Route to get all shirts
-app.get('/shirts', (request, response, next) => {
+app.get('/shirts', async (request, response, next) => {
   try {
-    response.json(SHIRTS);
+    //response.json(SHIRTS);
+    const res = await supabase.get('/shirts');
+    response.json(res.data);
   } catch (error) {
     next(error);
   }
@@ -162,10 +173,14 @@ app.put('/shirts/:id', (request, response, next) => {
       return value.id === parseInt(request.params.id);
     });
 
+    if (!findShirt) {
+      return response.status(404).json({ message: "Shirt doesn't exist!" });
+    }
+
     const { name, description, price, category, inStock } = request.body;
     if (!name || !description || !price || !category || !inStock) {
       return response
-        .status(400)
+        .status(404)
         .json({ message: 'Please provide all required fields' });
     }
 
@@ -213,7 +228,7 @@ app.use((error, request, response, next) => {
 
 // 404 Resource not found Error Handling
 app.use((request, response, next) => {
-  response.status(400).json({ error: 'Resource not found.' });
+  response.status(404).json({ error: 'Resource not found.' });
 });
 
 // Make the server listen on our port
