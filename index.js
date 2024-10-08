@@ -118,7 +118,6 @@ app.get('/', (request, response, next) => {
 // Route to get all shirts
 app.get('/shirts', async (request, response, next) => {
   try {
-    //response.json(SHIRTS);
     const res = await supabase.get('/shirts');
     response.json(res.data);
   } catch (error) {
@@ -127,16 +126,13 @@ app.get('/shirts', async (request, response, next) => {
 });
 
 // Route to get single shirt
-app.get('/shirts/:id', (request, response, next) => {
+app.get('/shirts/:id', async (request, response, next) => {
   try {
-    const findShirt = SHIRTS.find((value) => {
-      return value.id === parseInt(request.params.id);
-    });
-
-    if (!findShirt) {
-      return response.status(404).json({ message: "Shirts does't exist!" });
+    const res = await supabase.get(`/shirts?id=eq.${request.params.id}`);
+    if (!res.data.length) {
+      return response.status(404).json({ message: 'Shirts does"nt exist!' });
     }
-    response.json(findShirt);
+    response.json(res.data[0]);
   } catch (error) {
     next(error);
   }
