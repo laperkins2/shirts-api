@@ -142,7 +142,7 @@ app.get('/shirts/:id', async (request, response, next) => {
 app.post('/shirts', async (request, response, next) => {
   try {
     const { name, description, price, category, instock } = request.body;
-    console.log('request.body', request.body);
+
     if (
       !name ||
       !description ||
@@ -174,16 +174,8 @@ app.post('/shirts', async (request, response, next) => {
 });
 
 // Route to update shirt
-app.put('/shirts/:id', (request, response, next) => {
+app.put('/shirts/:id', async (request, response, next) => {
   try {
-    const findShirt = SHIRTS.find((value) => {
-      return value.id === parseInt(request.params.id);
-    });
-
-    if (!findShirt) {
-      return response.status(404).json({ message: "Shirt doesn't exist!" });
-    }
-
     const { name, description, price, category, instock } = request.body;
     if (!name || !description || !price || !category || !instock) {
       return response
@@ -191,17 +183,24 @@ app.put('/shirts/:id', (request, response, next) => {
         .json({ message: 'Please provide all required fields' });
     }
 
-    // set object values sent to request body
-    findShirt.name = name;
-    findShirt.description = description;
-    findShirt.price = price;
-    findShirt.category = category;
-    findShirt.inStock = instock;
+    const updateShirt = {
+      name,
+      description,
+      price,
+      category,
+      instock,
+    };
+    const shirtId = request.params.id;
 
-    //send update back in response
-    response.json(findShirt);
+    const { data } = await supabase.patch(
+      `/shirts?id=eq.${shirtId}`,
+      updateShirt
+    );
+
+    // Send updated data back in response
+    response.status(200).json(data);
   } catch (error) {
-    next(error);
+    response.status(500).json({ message: 'Error updating shirt!', error });
   }
 });
 
