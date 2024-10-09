@@ -184,8 +184,8 @@ app.put('/shirts/:id', (request, response, next) => {
       return response.status(404).json({ message: "Shirt doesn't exist!" });
     }
 
-    const { name, description, price, category, inStock } = request.body;
-    if (!name || !description || !price || !category || !inStock) {
+    const { name, description, price, category, instock } = request.body;
+    if (!name || !description || !price || !category || !instock) {
       return response
         .status(404)
         .json({ message: 'Please provide all required fields' });
@@ -196,7 +196,7 @@ app.put('/shirts/:id', (request, response, next) => {
     findShirt.description = description;
     findShirt.price = price;
     findShirt.category = category;
-    findShirt.inStock = inStock;
+    findShirt.inStock = instock;
 
     //send update back in response
     response.json(findShirt);
@@ -206,17 +206,11 @@ app.put('/shirts/:id', (request, response, next) => {
 });
 
 // Route to delete shirt
-app.delete('/shirts/:id', (request, response, next) => {
+app.delete('/shirts/:id', async (request, response, next) => {
   try {
-    const shirtId = parseInt(request.params.id);
-    const shirtIndex = SHIRTS.findIndex((shirt) => shirt.id === shirtId);
+    const res = await supabase.delete(`/shirts?id=eq.${request.params.id}`);
 
-    if (shirtIndex === -1) {
-      return response.status(404).json({ message: 'Shirt is not found!' });
-    }
-
-    SHIRTS.splice(shirtIndex, 1);
-    response.status(200).json({ message: 'Shirt was deleted!' });
+    response.status(200).json(res.data);
   } catch (error) {
     next(error);
   }
