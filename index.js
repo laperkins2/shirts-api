@@ -77,7 +77,7 @@ const SHIRTS = [
   },
   {
     id: 7,
-    name: 'Might Dogs',
+    name: 'Mighty Dogs',
     description: 'A group of dogs fighting crime.',
     price: 22.99,
     category: 'Super Hero',
@@ -139,25 +139,36 @@ app.get('/shirts/:id', async (request, response, next) => {
 });
 
 // Route to add shirts
-app.post('/shirts', (request, response, next) => {
+app.post('/shirts', async (request, response, next) => {
   try {
-    const { name, description, price, category, inStock } = request.body;
-    if (!name || !description || !price || !category || !inStock) {
+    const { name, description, price, category, instock } = request.body;
+    console.log('request.body', request.body);
+    if (
+      !name ||
+      !description ||
+      price == null ||
+      !category ||
+      instock == null
+    ) {
       return response
         .status(400)
         .json({ message: 'Please provide all required fields' });
     }
     const newShirt = {
-      id: SHIRTS.length + 1,
+      // id: SHIRTS.length + 1,
       name,
       description,
       price,
       category,
-      inStock,
+      instock,
     };
-    SHIRTS.push(newShirt);
-    response.status(201).json(newShirt);
+
+    const { data } = await supabase.post('/shirts', newShirt);
+
+    response.status(201).json(data);
   } catch (error) {
+    console.error('Supabase Error:', error);
+    response.status(500).json({ message: 'Internal Server Error' });
     next(error);
   }
 });
