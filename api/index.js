@@ -15,6 +15,8 @@ const supabase = require('../supabaseInstance');
 
 //import route functions
 const getAdd = require('./routes/getAdd');
+const getById = require('./routes/getById');
+const getUpdate = require('./routes/getUpdate');
 
 // create an express application
 const app = express();
@@ -50,51 +52,13 @@ app.get('/shirts', async (request, response, next) => {
 });
 
 // Route to get single shirt
-app.get('/shirts/:id', async (request, response, next) => {
-  try {
-    const res = await supabase.get(`/shirts?id=eq.${request.params.id}`);
-    if (!res.data.length) {
-      return response.status(404).json({ message: 'Shirts does"nt exist!' });
-    }
-    response.json(res.data[0]);
-  } catch (error) {
-    next(error);
-  }
-});
+app.get('/shirts/:id', getById);
 
 // Route to add shirts
 app.post('/shirts', getAdd);
 
 // Route to update shirt
-app.put('/shirts/:id', async (request, response, next) => {
-  try {
-    const { name, description, price, category, instock } = request.body;
-    if (!name || !description || !price || !category || !instock) {
-      return response
-        .status(404)
-        .json({ message: 'Please provide all required fields' });
-    }
-
-    const updateShirt = {
-      name,
-      description,
-      price,
-      category,
-      instock,
-    };
-    const shirtId = request.params.id;
-
-    const { data } = await supabase.patch(
-      `/shirts?id=eq.${shirtId}`,
-      updateShirt
-    );
-
-    // Send updated data back in response
-    response.status(200).json(data);
-  } catch (error) {
-    response.status(500).json({ message: 'Error updating shirt!', error });
-  }
-});
+app.put('/shirts/:id', getUpdate);
 
 // Route to delete shirt
 app.delete('/shirts/:id', async (request, response, next) => {
