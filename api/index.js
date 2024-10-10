@@ -17,6 +17,7 @@ const supabase = require('../supabaseInstance');
 const getAdd = require('./routes/getAdd');
 const getById = require('./routes/getById');
 const getUpdate = require('./routes/getUpdate');
+const getDelete = require('./routes/getDelete');
 
 // create an express application
 const app = express();
@@ -61,15 +62,7 @@ app.post('/shirts', getAdd);
 app.put('/shirts/:id', getUpdate);
 
 // Route to delete shirt
-app.delete('/shirts/:id', async (request, response, next) => {
-  try {
-    const res = await supabase.delete(`/shirts?id=eq.${request.params.id}`);
-
-    response.status(200).json(res.data);
-  } catch (error) {
-    next(error);
-  }
-});
+app.delete('/shirts/:id', getDelete);
 
 // Error Handling
 // Generic Error Handling
