@@ -14,6 +14,7 @@ const axios = require('axios');
 const supabase = require('../supabaseInstance');
 
 //import route functions
+const getAll = require('./routes/getAll');
 const getAdd = require('./routes/getAdd');
 const getById = require('./routes/getById');
 const getUpdate = require('./routes/getUpdate');
@@ -43,14 +44,7 @@ app.get('/', (request, response, next) => {
 });
 
 // Route to get all shirts
-app.get('/shirts', async (request, response, next) => {
-  try {
-    const res = await supabase.get('/shirts');
-    response.json(res.data);
-  } catch (error) {
-    next(error);
-  }
-});
+app.get('/shirts', getAll);
 
 // Route to get single shirt
 app.get('/shirts/:id', getById);
