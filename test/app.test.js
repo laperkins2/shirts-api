@@ -109,4 +109,8 @@ describe('Shirts API', () => {
     const response = await request(app).get('/shirts');
     expect(response.status).toBe(500);
   });
+  // Close the server after all tests
+  afterAll((done) => {
+    server.close(done);
+  });
 });
