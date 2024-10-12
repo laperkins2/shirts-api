@@ -2,8 +2,9 @@ const supabase = require('../../supabaseInstance');
 
 const getUpdate = async (request, response, next) => {
   try {
-    const { name, description, price, category, instock } = request.body;
-    if (!name || !description || !price || !category || !instock) {
+    const { name, description, price, category, instock, quantity } =
+      request.body;
+    if (!name || !description || !price || !category || !instock || quantity) {
       return response
         .status(404)
         .json({ message: 'Please provide all required fields' });
@@ -15,6 +16,7 @@ const getUpdate = async (request, response, next) => {
       price,
       category,
       instock,
+      quantity,
     };
     const shirtId = request.params.id;
 
