@@ -30,7 +30,9 @@ describe('Shirts API', () => {
       ],
     });
 
-    const response = await request(app).get('/shirts');
+    const response = await request(app)
+      .get('/shirts')
+      .set('api-key', process.env.ADMIN_API_KEY);
     expect(response.status).toBe(200);
     expect(Array.isArray(response.body)).toBe(true);
     expect(response.body.length).toBe(2);
@@ -51,7 +53,10 @@ describe('Shirts API', () => {
       data: { id: 1, ...newShirt },
     });
 
-    const response = await request(app).post('/shirts').send(newShirt);
+    const response = await request(app)
+      .post('/shirts')
+      .send(newShirt)
+      .set('api-key', process.env.ADMIN_API_KEY);
     expect(response.status).toBe(201);
     expect(response.body).toHaveProperty('id');
   });
@@ -62,7 +67,9 @@ describe('Shirts API', () => {
       data: [{ id: shirtId, name: 'Shirt 1' }],
     });
 
-    const response = await request(app).get(`/shirts/${shirtId}`);
+    const response = await request(app)
+      .get(`/shirts/${shirtId}`)
+      .set('api-key', process.env.ADMIN_API_KEY);
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('id', shirtId);
   });
@@ -85,7 +92,8 @@ describe('Shirts API', () => {
 
     const response = await request(app)
       .put(`/shirts/${shirtId}`)
-      .send(updatedShirt);
+      .send(updatedShirt)
+      .set('api-key', process.env.ADMIN_API_KEY);
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('name', 'Super Dad');
   });
@@ -98,7 +106,9 @@ describe('Shirts API', () => {
       data: { message: 'Shirt deleted successfully' },
     });
 
-    const response = await request(app).delete(`/shirts/${shirtId}`);
+    const response = await request(app)
+      .delete(`/shirts/${shirtId}`)
+      .set('api-key', process.env.ADMIN_API_KEY);
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty(
       'message',
@@ -110,12 +120,17 @@ describe('Shirts API', () => {
     const shirtId = 9999;
     supabase.get.mockResolvedValue({ data: [] });
 
-    const response = await request(app).get(`/shirts/${shirtId}`);
+    const response = await request(app)
+      .get(`/shirts/${shirtId}`)
+      .set('api-key', process.env.ADMIN_API_KEY);
     expect(response.status).toBe(404);
   });
   it('should return 400 for invalid add shirt request', async () => {
     const invalidShirt = { name: 'Incomplete Shirt' };
-    const response = await request(app).post('/shirts').send(invalidShirt);
+    const response = await request(app)
+      .post('/shirts')
+      .send(invalidShirt)
+      .set('api-key', process.env.ADMIN_API_KEY);
     expect(response.status).toBe(400);
     expect(response.body).toHaveProperty(
       'message',
@@ -128,7 +143,8 @@ describe('Shirts API', () => {
     const invalidShirt = { name: 'Incomplete Shirt' };
     const response = await request(app)
       .put(`/shirts/${shirtId}`)
-      .send(invalidShirt);
+      .send(invalidShirt)
+      .set('api-key', process.env.ADMIN_API_KEY);
     expect(response.status).toBe(400);
     expect(response.body).toHaveProperty(
       'message',
@@ -138,7 +154,9 @@ describe('Shirts API', () => {
   // Return 404 for Invalid Shirt ID Format
   it('should return 404 for invalid shirt ID format', async () => {
     const invalidId = 'abc';
-    const response = await request(app).get(`/shirts/${invalidId}`);
+    const response = await request(app)
+      .get(`/shirts/${invalidId}`)
+      .set('api-key', process.env.ADMIN_API_KEY);
     expect(response.status).toBe(404);
   });
 
@@ -146,7 +164,9 @@ describe('Shirts API', () => {
     jest.spyOn(supabase, 'get').mockImplementation(() => {
       throw new Error('Server error');
     });
-    const response = await request(app).get('/shirts');
+    const response = await request(app)
+      .get('/shirts')
+      .set('api-key', process.env.ADMIN_API_KEY);
     expect(response.status).toBe(500);
   });
 });
