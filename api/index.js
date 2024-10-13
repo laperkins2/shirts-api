@@ -37,6 +37,18 @@ app.use(cors(corsOptions));
 // Use JSON middleware to parse request bodies
 app.use(express.json());
 
+// Middleware for api key security
+app.use((request, response, next) => {
+  const apiKey = request.headers['api-key'];
+
+  if (apiKey !== process.env.ADMIN_API_KEY) {
+    return response
+      .status(403)
+      .json({ message: 'ACCESS DENIED! Need api key' });
+  }
+  next();
+});
+
 // Define our Routes
 // Home route
 app.get('/', (request, response, next) => {
