@@ -27,7 +27,12 @@ const getAdd = async (request, response, next) => {
       quantity,
     };
 
-    const { data } = await supabase.post('/shirts', newShirt);
+    const { data, error } = await supabase.post('/shirts', newShirt);
+
+    if (error) {
+      console.error('Error adding shirt:', error);
+      return response.status(500).json({ message: 'Internal Server Error' });
+    }
 
     response.status(201).json(data);
   } catch (error) {

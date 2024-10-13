@@ -4,9 +4,16 @@ const getUpdate = async (request, response, next) => {
   try {
     const { name, description, price, category, instock, quantity } =
       request.body;
-    if (!name || !description || !price || !category || !instock || quantity) {
+    if (
+      !name ||
+      !description ||
+      price == null ||
+      !category ||
+      instock == null ||
+      quantity == null
+    ) {
       return response
-        .status(404)
+        .status(400)
         .json({ message: 'Please provide all required fields' });
     }
 
@@ -20,15 +27,19 @@ const getUpdate = async (request, response, next) => {
     };
     const shirtId = request.params.id;
 
-    const { data } = await supabase.patch(
+    const { data, error } = await supabase.patch(
       `/shirts?id=eq.${shirtId}`,
       updateShirt
     );
+    if (error) {
+      return response.status(404).json({ message: 'Shirt not found' });
+    }
 
     // Send updated data back in response
     response.status(200).json(data);
   } catch (error) {
-    response.status(500).json({ message: 'Error updating shirt!', error });
+    console.error('Error updating shirt!:', error);
+    next(error);
   }
 };
 

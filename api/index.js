@@ -74,7 +74,12 @@ app.use((request, response, next) => {
   response.status(404).json({ error: 'Resource not found.' });
 });
 
+//Export the app for testing
+module.exports = app;
+
 // Make the server listen on our port
-app.listen(PORT, () => {
-  console.log(`The server is running on http://localhost:${PORT}`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`The server is running on http://localhost:${PORT}`);
+  });
+}
