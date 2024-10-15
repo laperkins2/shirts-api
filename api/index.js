@@ -24,12 +24,12 @@ const getDelete = require('./routes/getDelete');
 const app = express();
 
 // define a port
-const PORT = 4000;
+const PORT = process.env.PORT;
 
 //Define our Middleware
 // Use CORS
 const corsOptions = {
-  origin: 'http://localhost:4000',
+  origin: 'http://localhost:3000',
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 app.use(cors(corsOptions));
