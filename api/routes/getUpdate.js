@@ -2,7 +2,7 @@ const supabase = require('../../supabaseInstance');
 
 const getUpdate = async (request, response, next) => {
   try {
-    const { name, description, price, category, instock, quantity } =
+    const { name, description, price, category, instock, quantity, image_url } =
       request.body;
     if (
       !name ||
@@ -10,7 +10,8 @@ const getUpdate = async (request, response, next) => {
       price == null ||
       !category ||
       instock == null ||
-      quantity == null
+      quantity == null ||
+      !image_url == null
     ) {
       return response
         .status(400)
@@ -24,6 +25,7 @@ const getUpdate = async (request, response, next) => {
       category,
       instock,
       quantity,
+      image_url,
     };
     const shirtId = request.params.id;
 

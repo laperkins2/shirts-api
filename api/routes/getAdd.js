@@ -2,7 +2,7 @@ const supabase = require('../../supabaseInstance');
 
 const getAdd = async (request, response, next) => {
   try {
-    const { name, description, price, category, instock, quantity } =
+    const { name, description, price, category, instock, quantity, image_url } =
       request.body;
 
     if (
@@ -11,7 +11,8 @@ const getAdd = async (request, response, next) => {
       price == null ||
       !category ||
       instock == null ||
-      quantity == null
+      quantity == null ||
+      !image_url == null
     ) {
       return response
         .status(400)
@@ -25,6 +26,7 @@ const getAdd = async (request, response, next) => {
       category,
       instock,
       quantity,
+      image_url,
     };
 
     const { data, error } = await supabase.post('/shirts', newShirt);
