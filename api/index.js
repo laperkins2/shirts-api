@@ -29,7 +29,7 @@ const PORT = process.env.PORT;
 //Define our Middleware
 // Use CORS
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: process.env.CLIENT_URL,
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 app.use(cors(corsOptions));
