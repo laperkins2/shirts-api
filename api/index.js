@@ -44,7 +44,7 @@ app.use((request, response, next) => {
   if (apiKey !== process.env.ADMIN_API_KEY) {
     return response
       .status(403)
-      .json({ message: 'ACCESS DENIED! Need api key' });
+      .json({ message: 'ACCESS DENIED! Need api key!' });
   }
   next();
 });
