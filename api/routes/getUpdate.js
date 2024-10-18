@@ -11,7 +11,7 @@ const getUpdate = async (request, response, next) => {
       !category ||
       instock == null ||
       quantity == null ||
-      !image_url == null
+      image_url
     ) {
       return response
         .status(400)
